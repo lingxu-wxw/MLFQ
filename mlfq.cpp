@@ -27,13 +27,13 @@ void sched() {
         {
             cout << "[SCHEDULER] Queue " << colored_queues[i] << "\t";
             thread_attr *t = mlfq.at(i).front();
-            mlfq.at(i).pop();
-
+	    mlfq.at(i).pop();
+	    
             // run job for sec seconds
-            const int sec = MIN(t->quoteremain, t->executeremain);
+            const int sec = MIN(t->quotaremain, t->executeremain);
             int cost = t->job((void *) &sec);
-            // modify quoteremain and executeremain
-            t->quoteremain -= cost;
+            // modify quotaremain and executeremain
+            t->quotaremain -= cost;
             t->executeremain -= cost; 
             // time to boost
             counter += cost;
@@ -45,7 +45,7 @@ void sched() {
             if (cost < sec) {
                 mlfq.at(i).push(t);
             }
-            else if (t->executetime == 0) {
+            else if (t->executeremain == 0) {
                 // continue;
             }
             else {
@@ -56,7 +56,7 @@ void sched() {
                     t->quota = periods[next];
                 }
                 // if t's priority is LOW, reset the remain and push back 
-                t->quoteremain = periods[next];
+                t->quotaremain = periods[next];
                 mlfq.at(next).push(t);
             }
         }
@@ -70,7 +70,7 @@ void sched() {
                     mlfq.at(i).pop();
                     t->priority = PRIORITY_HIGH;
                     t->quota = periods[PRIORITY_HIGH];
-                    t->quoteremain = periods[PRIORITY_HIGH];
+                    t->quotaremain = periods[PRIORITY_HIGH];
                     mlfq.at(PRIORITY_HIGH).push(t);
                 }
             }

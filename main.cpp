@@ -59,40 +59,46 @@ int main(int argc, char **argv) {
     attr1->name = "Alice";
     attr1->priority = PRIORITY_HIGH;
     attr1->quota = periods[PRIORITY_HIGH];
-    attr1->remain = periods[PRIORITY_HIGH];
+    attr1->quotaremain = periods[PRIORITY_HIGH];
     attr1->arrivetime = 0;
     attr1->executetime = 4;
-    attr1->executeremain = ;
-    
+    attr1->executeremain = 4;
+
     thread_attr *attr2 = new thread_attr();
     attr2->name = "Bob";
     attr2->job = user_job2;
     attr2->priority = PRIORITY_HIGH;
     attr2->quota = periods[PRIORITY_HIGH];
-    attr2->remain = periods[PRIORITY_HIGH];
-    attr1->arrivetime = 0;
-    attr1->executetime = 8;
-    attr1->executeremain = ;
+    attr2->quotaremain = periods[PRIORITY_HIGH];
+    attr2->arrivetime = 0;
+    attr2->executetime = 8;
+    attr2->executeremain = 8; 
 
     thread_attr *attr3 = new thread_attr();
     attr3->name = "Cambridge";
     attr3->job = user_job3;
     attr3->priority = PRIORITY_HIGH;
     attr3->quota = periods[PRIORITY_HIGH];
-    attr3->remain = periods[PRIORITY_HIGH];
-    attr1->arrivetime = 0;
-    attr1->executetime = 16;
-    attr1->executeremain = 16;
+    attr3->quotaremain = periods[PRIORITY_HIGH];
+    attr3->arrivetime = 0;
+    attr3->executetime = 16;
+    attr3->executeremain = 16;
 
     thread_attr *attr4 = new thread_attr();
     attr4->name = "David";
     attr4->job = user_job4;
     attr4->priority = PRIORITY_HIGH;
     attr4->quota = periods[PRIORITY_HIGH];
-    attr4->remain = periods[PRIORITY_HIGH];
-    attr1->arrivetime = 0;
-    attr1->executetime = 32;
-    attr1->executeremain = 32;
+    attr4->quotaremain = periods[PRIORITY_HIGH];
+    attr4->arrivetime = 0;
+    attr4->executetime = 32;
+    attr4->executeremain = 32; 
+
+    cout << "JOB 1 execute time: " << attr1->executetime << "s" << endl;
+    cout << "JOB 2 execute time: " << attr2->executetime << "s" << endl;
+    cout << "JOB 3 execute time: " << attr3->executetime << "s" << endl;
+    cout << "JOB 4 execute time: " << attr4->executetime << "s" << endl;
+    cout << "------------------------------" << endl;
 
     mlfq.at(PRIORITY_HIGH).push(attr1);
     mlfq.at(PRIORITY_HIGH).push(attr2);
@@ -105,5 +111,6 @@ int main(int argc, char **argv) {
     delete attr2;
     delete attr3;
     delete attr4;
+
     return 0;
 }

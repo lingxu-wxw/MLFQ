@@ -19,7 +19,7 @@ typedef struct _thread_attr {
     char *name;
     int   priority;
     int   quota;
-    int   quoteremain;
+    int   quotaremain;
     int   arrivetime;
     int   executetime;
     int   executeremain;
