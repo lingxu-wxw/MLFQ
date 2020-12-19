@@ -11,6 +11,7 @@ using std::queue;
 using std::vector;
 
 extern vector<queue<thread_attr *> > mlfq;
+extern queue<thread_attr *> waiting;
 
 int user_job1(void *arg) {
     int time = *(int *)arg;
@@ -61,8 +62,8 @@ int main(int argc, char **argv) {
     attr1->quota = periods[PRIORITY_HIGH];
     attr1->quotaremain = periods[PRIORITY_HIGH];
     attr1->arrivetime = 0;
-    attr1->executetime = 4;
-    attr1->executeremain = 4;
+    attr1->executetime = 16;
+    attr1->executeremain = 16;
 
     thread_attr *attr2 = new thread_attr();
     attr2->name = "Bob";
@@ -74,7 +75,7 @@ int main(int argc, char **argv) {
     attr2->executetime = 8;
     attr2->executeremain = 8; 
 
-    thread_attr *attr3 = new thread_attr();
+    /* thread_attr *attr3 = new thread_attr();
     attr3->name = "Cambridge";
     attr3->job = user_job3;
     attr3->priority = PRIORITY_HIGH;
@@ -92,25 +93,26 @@ int main(int argc, char **argv) {
     attr4->quotaremain = periods[PRIORITY_HIGH];
     attr4->arrivetime = 0;
     attr4->executetime = 32;
-    attr4->executeremain = 32; 
+    attr4->executeremain = 32; */
 
-    cout << "JOB 1 execute time: " << attr1->executetime << "s" << endl;
-    cout << "JOB 2 execute time: " << attr2->executetime << "s" << endl;
-    cout << "JOB 3 execute time: " << attr3->executetime << "s" << endl;
-    cout << "JOB 4 execute time: " << attr4->executetime << "s" << endl;
+    cout << "JOB 1: arrive time: " << attr1->arrivetime << "s, execute time: " << attr1->executetime << "s" << endl;
+    cout << "JOB 2: arrive time: " << attr2->arrivetime << "s, execute time: " << attr2->executetime << "s" << endl;
+    /* cout << "JOB 3: arrive time: " << attr3->arrivetime << "s, execute time: " << attr3->executetime << "s" << endl;
+    cout << "JOB 4: arrive time: " << attr4->arrivetime << "s, execute time: " << attr4->executetime << "s" << endl; */
     cout << "------------------------------" << endl;
 
     mlfq.at(PRIORITY_HIGH).push(attr1);
-    mlfq.at(PRIORITY_HIGH).push(attr2);
+    waiting.push(attr2);
+    /* mlfq.at(PRIORITY_HIGH).push(attr2);
     mlfq.at(PRIORITY_HIGH).push(attr3);
-    mlfq.at(PRIORITY_HIGH).push(attr4);
+    mlfq.at(PRIORITY_HIGH).push(attr4); */
 
     sched();
 
     delete attr1;
     delete attr2;
-    delete attr3;
-    delete attr4;
+    /* delete attr3;
+    delete attr4; */
 
     return 0;
 }

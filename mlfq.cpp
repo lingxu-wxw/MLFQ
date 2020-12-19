@@ -10,6 +10,7 @@ using std::cout;
 using std::endl;
 
 vector<queue<thread_attr *> > mlfq;
+queue<thread_attr *> waiting;
 
 void sched() {
     // int empty = 0;
@@ -27,10 +28,21 @@ void sched() {
         {
             cout << "[SCHEDULER] Queue " << colored_queues[i] << "\t";
             thread_attr *t = mlfq.at(i).front();
-	    mlfq.at(i).pop();
+	        mlfq.at(i).pop();
 	    
             // run job for sec seconds
-            const int sec = MIN(t->quotaremain, t->executeremain);
+            int sec = MIN(t->quotaremain, t->executeremain);
+
+            // preemption
+            if (!waiting.empty()) {
+                int nextarrive = waiting.front()->arrivetime;
+                if (counter + sec >= nextarrive) {
+                    sec = nextarrive - counter;
+                    mlfq.at(PRIORITY_HIGH).push(waiting.front())
+                    waiting.pop();
+                }
+            }
+            
             int cost = t->job((void *) &sec);
             // modify quotaremain and executeremain
             t->quotaremain -= cost;
@@ -45,10 +57,7 @@ void sched() {
             if (cost < sec) {
                 mlfq.at(i).push(t);
             }
-            else if (t->executeremain == 0) {
-                // continue;
-            }
-            else {
+            else if (t->executeremain != 0) {
                 // move t to a queue with lower priority
                 int next = i;
                 if (next != PRIORITY_LOW) {
