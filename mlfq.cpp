@@ -43,20 +43,20 @@ void sched() {
         {
             cout << "[SCHEDULER] Queue " << colored_queues[i] << "\t";
             thread_attr *t = mlfq.at(i).front();
-	    mlfq.at(i).pop();
+	        mlfq.at(i).pop();
 
             // run job for sec seconds
             int sec = MIN(t->quotaremain, t->executeremain);
             
             // preemption
-	    int nextarrive = waiting.empty() ? INT_MAX : waiting.front()->arrivetime;
-	    int nextboost = BOOST_PERIOD * boostcnt;
-	    int next = MIN(nextarrive, nextboost);
-	    bool flag = false;
+	        int nextarrive = waiting.empty() ? INT_MAX : waiting.front()->arrivetime;
+	        int nextboost = BOOST_PERIOD * boostcnt;
+	        int next = MIN(nextarrive, nextboost);
+	        bool flag = false;
             if (counter + sec >= next) {
-		sec = next - counter;
-		flag = true;
-	    } 
+		        sec = next - counter;
+		        flag = true;
+	        } 
             
             int cost = t->job((void *) &sec);
             // modify quotaremain and executeremain
@@ -76,8 +76,8 @@ void sched() {
                 mlfq.at(next).push(t);
             }
 
-	    // solve new arrive and boost
-	    if (flag && next == nextarrive) {
+	        // solve new arrive and boost
+	        if (flag && next == nextarrive) {
                 mlfq.at(PRIORITY_HIGH).push(waiting.front());
                 waiting.pop();
                 if (counter >= nextboost) {
@@ -85,7 +85,7 @@ void sched() {
                     boostcnt++;
                 }
             }
-	    else if (flag && next == nextboost) {
+	        else if (flag && next == nextboost) {
                 boost();
                 boostcnt++;
                 if (counter >= nextarrive) {
