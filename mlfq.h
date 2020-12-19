@@ -3,6 +3,8 @@
 
 #define MIN(a, b) ((a) > (b) ? (b) : (a))
 
+#define INT_MAX 2147483647
+
 const int PRIORITY_HIGH = 0;
 const int PRIORITY_MID  = 1;
 const int PRIORITY_LOW  = 2;
@@ -26,6 +28,7 @@ typedef struct _thread_attr {
     int   (*job)(void *arg);
 } thread_attr;
 
+void boost();
 void sched();
 
 #endif
